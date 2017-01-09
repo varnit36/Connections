@@ -17,13 +17,14 @@ public class MainActivity extends AppCompatActivity {
     protected TextView Text2;
     protected String macAddr;
     protected String bssid;
-    public BroadcastReceiver broadcastReceiver;
-    public IntentFilter intentFilter;
+    public BroadcastReceiver broadcastReceiver=null;
+    public IntentFilter intentFilter=null;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -31,18 +32,20 @@ public class MainActivity extends AppCompatActivity {
         newText.setText("hello");
 
 
-        broadcastReceiver = new WifiBroadcastReceiver();
+        broadcastReceiver = new WifiBroadcastReceiver(this);
         intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         registerReceiver(broadcastReceiver, intentFilter);
 
 
-        updateText();
+        setIDs();
+
     }
 
 
 
-    private void setIDs(){
+
+    public void setIDs(){
 
         WifiManager wifiMan = (WifiManager)getSystemService(Context.WIFI_SERVICE);
 
@@ -51,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
         macAddr = wifiInfo.getMacAddress();
         bssid = wifiInfo.getBSSID();
 
+        updateText();
+
     }
 
     public void updateText(){
 
-        setIDs();
+        //setIDs();
 
         Text1 = (TextView) findViewById(R.id.macAdd);
         Text1.setText(macAddr);
